@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>demo-haima</artifactId>
+        <groupId>com.demo</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>demo-haima-test</artifactId>
+
+    <dependencies>
+        <!-- Testing Suite -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <!-- Web Socket -->
+        <dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+
+        <!-- Java Object Layout -->
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+        </dependency>
+
+        <!-- demo-haima-common -->
+        <dependency>
+            <groupId>com.demo</groupId>
+            <artifactId>demo-haima-common</artifactId>
+        </dependency>
+        <!-- demo-haima-client -->
+        <dependency>
+            <groupId>com.demo</groupId>
+            <artifactId>demo-haima-client</artifactId>
+        </dependency>
+        <!-- demo-haima-server -->
+        <dependency>
+            <groupId>com.demo</groupId>
+            <artifactId>demo-haima-server</artifactId>
+        </dependency>
+    </dependencies>
+</project>
