@@ -86,6 +86,7 @@ public class AioDemoDuplexServerSocket extends ContainerRunner implements Runnab
                 return;
             }
             serverSocketChannel.close();
+            channelGroup.shutdown();
             // Wait until server socket thread stops running
             containerRunner.join();
             setServerSocketState(ServerSocketState.CLOSED);

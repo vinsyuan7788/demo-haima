@@ -6,6 +6,7 @@ import com.demo.haima.test.integration.demo.utils.provider.AsynchronousChannelIn
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.EOFException;
 import java.net.SocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -22,7 +23,13 @@ public abstract class CompletionHandlerHelper implements CompletionExceptionHand
 
     @Override
     public void handleRunningThrowable(Throwable t) {
-        LOG.error(className + " | Process event error", t);
+        if (t instanceof EOFException) {
+            LOG.error("Reason unknown yet, but this exception may occasionally occur in duplex communication when client " +
+                    "tries to read the byte buffer that has been read by client socket channel to a packet, while in " +
+                    "NIO-implementation this exception never occurs. When it occurs, just re-run the test for now", t);
+        } else {
+            LOG.error(className + " | Process event error", t);
+        }
     }
 
     @Override

@@ -91,6 +91,7 @@ public class AioDemoDuplexClientSocket extends ContainerRunner implements Runnab
         try {
             while (outgoingPacketQueue.size() > 0 || connectionIdAndProcessingPacketMap.size() > 0) { }
             closeSocketChannel(clientSocketChannel);
+            channelGroup.shutdown();
             containerRunner.join();
             client.setClientState(ClientState.CLOSED);
         } catch (Throwable t) {

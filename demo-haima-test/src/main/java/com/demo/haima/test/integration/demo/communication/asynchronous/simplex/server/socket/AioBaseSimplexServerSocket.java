@@ -215,6 +215,7 @@ public class AioBaseSimplexServerSocket extends ContainerRunner implements Runna
                 return;
             }
             serverSocketChannel.close();
+            channelGroup.shutdown();
             // Wait until server socket thread stops running
             containerRunner.join();
             setServerSocketState(ServerSocketState.CLOSED);
@@ -230,6 +231,7 @@ public class AioBaseSimplexServerSocket extends ContainerRunner implements Runna
                 return;
             }
             serverSocketChannel.close();
+            channelGroup.shutdown();
             // Wait until server socket thread stops running
             containerRunner.join();
             setServerSocketState(ServerSocketState.CLOSED);

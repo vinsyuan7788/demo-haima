@@ -39,11 +39,11 @@ public class AioDemoDuplexClientSocketReadCompletionHandler extends CompletionHa
             if (numberOfBytesRead < 0) {
                 return;
             }
-            LOG.info("[Data] | Client reads bytes from server {} | bytes: {}", clientSocket.getServerAddressToConnect(), numberOfBytesRead);
+            LOG.info("[Data] | Client reads bytes from server {} | bytes: {} | byte buffer read: {}", clientSocket.getServerAddressToConnect(), numberOfBytesRead, byteBuffer);
 
             // Read the data from the byte buffer
             Packet packet = Packet.readOnClient(byteBuffer);
-            LOG.info("[Data] | Client reads packet from server {} | packet: {}", clientSocket.getServerAddressToConnect(), packet);
+            LOG.info("[Data] | Client reads packet from server {} | packet: {} | byte buffer read: {}", clientSocket.getServerAddressToConnect(), packet, byteBuffer);
 
             // Process received packet
             processReceivedPacket(packet, clientSocket);

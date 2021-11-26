@@ -173,6 +173,7 @@ public class AioBaseSimplexClientSocket extends ContainerRunner implements Runna
                 return;
             }
             clientSocketChannel.close();
+            channelGroup.shutdown();
             setClientSocketState(ClientSocketState.CLOSED);
             LOG.info("Client socket channel is closed");
         } catch (Throwable t) {
@@ -187,6 +188,7 @@ public class AioBaseSimplexClientSocket extends ContainerRunner implements Runna
                 return;
             }
             clientSocketChannel.close();
+            channelGroup.shutdown();
             containerRunner.join();
             setClientSocketState(ClientSocketState.CLOSED);
         } catch (Throwable t) {
