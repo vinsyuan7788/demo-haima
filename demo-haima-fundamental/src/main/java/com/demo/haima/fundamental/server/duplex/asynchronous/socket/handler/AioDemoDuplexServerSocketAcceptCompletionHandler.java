@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Vince Yuan
@@ -34,9 +35,11 @@ public class AioDemoDuplexServerSocketAcceptCompletionHandler extends Completion
             // Update global tracker
             serverSocket.getAcceptingTracker().decrementAndGet();
 
-            // Read the data sent from client through the channel into a byte buffer
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-            acceptedSocketChannel.read(byteBuffer, AioDemoDuplexServerSocketReadCompletionHandler.Attachment.create(serverSocket, acceptedSocketChannel, byteBuffer), readCompletionHandler);
+            // Scatter-read the data sent from client through the channel into byte buffers
+            ByteBuffer byteBufferOfHeader = ByteBuffer.allocateDirect(42);
+            ByteBuffer byteBufferOfBody = ByteBuffer.allocateDirect(1024);
+            ByteBuffer[] byteBuffers = new ByteBuffer[] { byteBufferOfHeader, byteBufferOfBody };
+            acceptedSocketChannel.read(byteBuffers, 0, byteBuffers.length, 30, TimeUnit.SECONDS, AioDemoDuplexServerSocketReadCompletionHandler.Attachment.create(serverSocket, acceptedSocketChannel, byteBufferOfHeader, byteBufferOfBody), readCompletionHandler);
         } catch (Throwable t) {
             handleRunningThrowable(t);
         }

@@ -1,6 +1,8 @@
 package com.demo.haima.fundamental.client.duplex.nonblocking.socket;
 
 import com.demo.haima.fundamental.client.duplex.nonblocking.DemoDuplexClient;
+import com.demo.haima.fundamental.utils.auxiliary.ContainerRunner;
+import com.demo.haima.fundamental.utils.data.network.definition.ByteBufferType;
 import com.demo.haima.fundamental.utils.data.network.definition.OperationType;
 import com.demo.haima.fundamental.utils.data.network.packet.Packet;
 import com.demo.haima.fundamental.utils.data.network.response.body.ResponseBody;
@@ -8,7 +10,6 @@ import com.demo.haima.fundamental.utils.data.network.response.body.SnowflakeIdRe
 import com.demo.haima.fundamental.utils.data.network.response.body.TransmitDataResponseBody;
 import com.demo.haima.fundamental.utils.data.network.response.header.ResponseHeader;
 import com.demo.haima.fundamental.utils.exception.DemoException;
-import com.demo.haima.fundamental.utils.auxiliary.ContainerRunner;
 import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientSocketState;
 import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientState;
 import com.demo.haima.fundamental.utils.state.packet.PacketProcessState;
@@ -222,16 +223,18 @@ public class NioDemoDuplexClientSocket extends ContainerRunner implements Runnab
             return;
         }
 
-        // Read the data sent from client through the channel into a byte buffer
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        int numberOfBytesRead = clientSocketChannel.read(byteBuffer);
+        // Scatter-read the data sent from server through the channel into byte buffers
+        ByteBuffer byteBufferOfHeader = ByteBuffer.allocateDirect(42);
+        ByteBuffer byteBufferOfBody = ByteBuffer.allocateDirect(1024);
+        ByteBuffer[] byteBuffers = new ByteBuffer[] { byteBufferOfHeader, byteBufferOfBody };
+        long numberOfBytesRead = clientSocketChannel.read(byteBuffers);
         if (numberOfBytesRead < 0) {
             return;
         }
         LOG.info("[Data] | Client reads bytes from server {} | bytes: {}", serverAddressToConnect, numberOfBytesRead);
 
-        // Read the data from the byte buffer
-        Packet packet = Packet.readOnClient(byteBuffer);
+        // Read the data from the byte buffers
+        Packet packet = Packet.readOnClient(byteBufferOfHeader, byteBufferOfBody);
         LOG.info("[Data] | Client reads packet from server {} | packet: {}", serverAddressToConnect, packet);
 
         // Process received packet
@@ -265,12 +268,12 @@ public class NioDemoDuplexClientSocket extends ContainerRunner implements Runnab
 
         // Keep track of this packet that is under processing
         connectionIdAndProcessingPacketMap.put(packetToSend.getRequestHeader().getConnectionId(), packetToSend);
-        LOG.info("[Process] | Packet starts waiting to be processed | packet: {}", packetToSend);
+        LOG.info("[Process] | Packet is waiting for being processed | packet: {}", packetToSend);
 
-        // Get the byte buffer from packet
-        ByteBuffer byteBuffer = packetToSend.getByteBuffer();
-        // Send the byte buffer to server
-        int numberOfBytesWritten = clientSocketChannel.write(byteBuffer);
+        // Get the byte buffers from packet
+        ByteBuffer[] byteBuffers = packetToSend.getByteBuffersOnClient(ByteBufferType.DIRECT);
+        // Gather-write the byte buffers to server
+        long numberOfBytesWritten = clientSocketChannel.write(byteBuffers);
         if (numberOfBytesWritten < 0) {
             return;
         }

@@ -1,6 +1,7 @@
 package com.demo.haima.fundamental.client.simplex.nonblocking.socket;
 
 import com.demo.haima.fundamental.client.simplex.nonblocking.DemoSimplexClient;
+import com.demo.haima.fundamental.utils.data.network.definition.ByteBufferType;
 import com.demo.haima.fundamental.utils.data.network.packet.Packet;
 import com.demo.haima.fundamental.utils.auxiliary.ContainerRunner;
 import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientSocketState;
@@ -228,10 +229,10 @@ public class NioDemoSimplexClientSocket extends ContainerRunner implements Runna
         connectionIdAndProcessingPacketMap.put(packetToSend.getRequestHeader().getConnectionId(), packetToSend);
         LOG.info("[Process] | Packet is waiting for being processed | packet: {}", packetToSend);
 
-        // Get the byte buffer from packet
-        ByteBuffer byteBuffer = packetToSend.getByteBuffer();
-        // Send the byte buffer to server
-        int numberOfBytesWritten = clientSocketChannel.write(byteBuffer);
+        // Get the byte buffers from packet
+        ByteBuffer[] byteBuffers = packetToSend.getByteBuffersOnClient(ByteBufferType.DIRECT);
+        // Gather-write the byte buffers to server
+        long numberOfBytesWritten = clientSocketChannel.write(byteBuffers);
         if (numberOfBytesWritten < 0) {
             return;
         }

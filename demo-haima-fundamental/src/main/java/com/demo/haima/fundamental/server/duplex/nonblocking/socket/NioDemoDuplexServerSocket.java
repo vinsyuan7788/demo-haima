@@ -214,16 +214,18 @@ public class NioDemoDuplexServerSocket extends ContainerRunner implements Runnab
             return;
         }
 
-        // Read the data sent from client through the channel into a byte buffer
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        int numberOfBytesRead = acceptedSocketChannel.read(byteBuffer);
+        // Scatter-read the data sent from client through the channel into byte buffers
+        ByteBuffer byteBufferOfHeader = ByteBuffer.allocateDirect(42);
+        ByteBuffer byteBufferOfBody = ByteBuffer.allocateDirect(1024);
+        ByteBuffer[] byteBuffers = new ByteBuffer[] { byteBufferOfHeader, byteBufferOfBody };
+        long numberOfBytesRead = acceptedSocketChannel.read(byteBuffers);
         if (numberOfBytesRead < 0) {
             return;
         }
         LOG.info("[Data] | Server reads bytes from client {} | bytes: {}", acceptedSocketChannel.getRemoteAddress(), numberOfBytesRead);
 
-        // Read the data from the byte buffer
-        Packet packet = Packet.readOnServer(byteBuffer);
+        // Read the data from the byte buffers
+        Packet packet = Packet.readOnServer(byteBufferOfHeader, byteBufferOfBody);
         LOG.info("[Data] | Server reads packet from client {} | packet: {}", acceptedSocketChannel.getRemoteAddress(), packet);
 
         // Process received packet and return a new one
@@ -245,10 +247,10 @@ public class NioDemoDuplexServerSocket extends ContainerRunner implements Runnab
         // Get the packet to send
         Packet packetToSend = (Packet) selectedKey.attachment();
 
-        // Get the byte buffer from packet
-        ByteBuffer byteBuffer = packetToSend.getByteBuffer();
-        // Send the byte buffer to client
-        int numberOfBytesWritten = acceptedSocketChannel.write(byteBuffer);
+        // Get the byte buffers from packet
+        ByteBuffer[] byteBuffers = packetToSend.getByteBuffersOnServer(ByteBufferType.DIRECT);
+        // Gather-write the byte buffers to client
+        long numberOfBytesWritten = acceptedSocketChannel.write(byteBuffers);
         if (numberOfBytesWritten < 0) {
             return;
         }
@@ -308,7 +310,7 @@ public class NioDemoDuplexServerSocket extends ContainerRunner implements Runnab
         // Create a response header for the packet to return
         ResponseHeader responseHeader = ResponseHeader.create(connectionId, operationType);
         // Return a new packet to send to client
-        Packet packet = Packet.create(responseHeader, responseBody, ByteBufferType.DIRECT);
+        Packet packet = Packet.create(responseHeader, responseBody);
         LOG.info("[Process] | Server generates a new packet to send | packet: {}", packet);
         return packet;
     }

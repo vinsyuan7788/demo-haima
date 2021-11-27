@@ -3,7 +3,6 @@ package com.demo.haima.fundamental.client.simplex.nonblocking;
 import com.demo.haima.common.utility.LogUtils;
 import com.demo.haima.fundamental.client.simplex.nonblocking.socket.NioSerdesSimplexClientSocket;
 import com.demo.haima.fundamental.client.simplex.nonblocking.socket.SerdesSimplexClientSocket;
-import com.demo.haima.fundamental.utils.data.network.definition.ByteBufferType;
 import com.demo.haima.fundamental.utils.data.network.definition.OperationType;
 import com.demo.haima.fundamental.utils.data.network.packet.Packet;
 import com.demo.haima.fundamental.utils.data.network.request.body.RequestBody;
@@ -62,7 +61,7 @@ public class NioSerdesSimplexClient extends SerdesSimplexClient {
         long startTimeMillis = System.currentTimeMillis();
         RequestHeader requestHeader = RequestHeader.create(OperationType.TRANSMIT_DATA);
         RequestBody requestBody = TransmitDataRequestBody.create(data);
-        Packet packet = Packet.create(requestHeader, requestBody, ByteBufferType.DIRECT);
+        Packet packet = Packet.create(requestHeader, requestBody);
         System.out.println("Time elapsed for creating a packet: " + (System.currentTimeMillis() - startTimeMillis) + "ms");
         clientSocket.submit(packet);
     }

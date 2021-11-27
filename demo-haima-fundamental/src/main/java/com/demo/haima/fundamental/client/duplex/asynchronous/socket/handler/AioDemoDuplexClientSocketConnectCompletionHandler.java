@@ -3,6 +3,7 @@ package com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler;
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.AioDemoDuplexClientSocket;
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler.AioDemoDuplexClientSocketConnectCompletionHandler.Attachment;
 import com.demo.haima.fundamental.utils.auxiliary.CompletionHandlerHelper;
+import com.demo.haima.fundamental.utils.data.network.definition.ByteBufferType;
 import com.demo.haima.fundamental.utils.data.network.packet.Packet;
 import com.demo.haima.fundamental.utils.state.client.asynchronous.ClientSocketState;
 import com.demo.haima.fundamental.utils.state.packet.PacketProcessState;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Vince Yuan
@@ -53,10 +55,10 @@ public class AioDemoDuplexClientSocketConnectCompletionHandler extends Completio
             clientSocket.getConnectionIdAndProcessingPacketMap().put(packetToSend.getRequestHeader().getConnectionId(), packetToSend);
             LOG.info("[Process] | Packet starts waiting to be processed | packet: {}", packetToSend);
 
-            // Get the byte buffer from packet
-            ByteBuffer byteBuffer = packetToSend.getByteBuffer();
-            // Send the byte buffer to server
-            clientSocketChannel.write(byteBuffer, AioDemoDuplexClientSocketWriteCompletionHandler.Attachment.create(clientSocket, packetToSend), writeCompletionHandler);
+            // Get the byte buffers from packet
+            ByteBuffer[] byteBuffers = packetToSend.getByteBuffersOnClient(ByteBufferType.DIRECT);
+            // Gather-write the byte buffers to server
+            clientSocketChannel.write(byteBuffers, 0, byteBuffers.length, 30, TimeUnit.SECONDS, AioDemoDuplexClientSocketWriteCompletionHandler.Attachment.create(clientSocket, packetToSend), writeCompletionHandler);
         } catch (Throwable t) {
             handleRunningThrowable(t);
         }

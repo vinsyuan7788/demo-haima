@@ -204,16 +204,18 @@ public class NioDemoSimplexServerSocket extends ContainerRunner implements Runna
             return;
         }
 
-        // Read the data sent from client through the channel into a byte buffer
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-        int numberOfBytesRead = acceptedSocketChannel.read(byteBuffer);
+        // Scatter-read the data sent from client through the channel into byte buffers
+        ByteBuffer byteBufferOfHeader = ByteBuffer.allocateDirect(42);
+        ByteBuffer byteBufferOfBody = ByteBuffer.allocateDirect(1024);
+        ByteBuffer[] byteBuffers = new ByteBuffer[] { byteBufferOfHeader, byteBufferOfBody };
+        long numberOfBytesRead = acceptedSocketChannel.read(byteBuffers);
         if (numberOfBytesRead < 0) {
             return;
         }
         LOG.info("[Data] | Server reads bytes from client {} | bytes: {}", acceptedSocketChannel.getRemoteAddress(), numberOfBytesRead);
 
-        // Read the data from the byte buffer
-        Packet packet = Packet.readOnServer(byteBuffer);
+        // Read the data from the byte buffers
+        Packet packet = Packet.readOnServer(byteBufferOfHeader, byteBufferOfBody);
         LOG.info("[Data] | Server reads packet from client {} | packet: {}", acceptedSocketChannel.getRemoteAddress(), packet);
 
         // Process received packet

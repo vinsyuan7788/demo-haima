@@ -9,19 +9,20 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.CompletionHandler;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Vince Yuan
  * @date 2021/11/24
  */
-public class AioDemoDuplexClientSocketWriteCompletionHandler extends CompletionHandlerHelper implements CompletionHandler<Integer, Attachment> {
+public class AioDemoDuplexClientSocketWriteCompletionHandler extends CompletionHandlerHelper implements CompletionHandler<Long, Attachment> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AioDemoDuplexClientSocketWriteCompletionHandler.class);
 
     private AioDemoDuplexClientSocketReadCompletionHandler readCompletionHandler;
 
     @Override
-    public void completed(Integer numberOfBytesWritten, Attachment attachment) {
+    public void completed(Long numberOfBytesWritten, Attachment attachment) {
         try {
             // Get content from attachment
             AioDemoDuplexClientSocket clientSocket = attachment.getClientSocket();
@@ -34,9 +35,11 @@ public class AioDemoDuplexClientSocketWriteCompletionHandler extends CompletionH
             LOG.info("[Data] | Client writes bytes to server {} | bytes: {}", clientSocket.getServerAddressToConnect(), numberOfBytesWritten);
             LOG.info("[Data] | Client writes packet to server {} | packet: {}", clientSocket.getServerAddressToConnect(), packetToSend);
 
-            // Read the data sent from client through the channel into a byte buffer
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-            clientSocket.getClientSocketChannel().read(byteBuffer, AioDemoDuplexClientSocketReadCompletionHandler.Attachment.create(clientSocket, byteBuffer), readCompletionHandler);
+            // Scatter-read the data sent from server through the channel into byte buffers
+            ByteBuffer byteBufferOfHeader = ByteBuffer.allocateDirect(42);
+            ByteBuffer byteBufferOfBody = ByteBuffer.allocateDirect(1024);
+            ByteBuffer[] byteBuffers = new ByteBuffer[] { byteBufferOfHeader, byteBufferOfBody };
+            clientSocket.getClientSocketChannel().read(byteBuffers, 0, byteBuffers.length, 30, TimeUnit.SECONDS, AioDemoDuplexClientSocketReadCompletionHandler.Attachment.create(clientSocket, byteBufferOfHeader, byteBufferOfBody), readCompletionHandler);
         } catch (Throwable t) {
             handleRunningThrowable(t);
         }

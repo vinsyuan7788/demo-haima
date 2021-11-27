@@ -9,15 +9,15 @@ import com.demo.haima.fundamental.utils.data.network.io.wrapper.OutputWrapper;
  */
 public class SnowflakeIdResponseBody extends ResponseBody {
 
-    private Long snowflakeId;
+    private long snowflakeId;
 
     private SnowflakeIdResponseBody() { }
 
-    private SnowflakeIdResponseBody(Long snowflakeId) {
+    private SnowflakeIdResponseBody(long snowflakeId) {
         this.snowflakeId = snowflakeId;
     }
 
-    public Long getSnowflakeId() {
+    public long getSnowflakeId() {
         return snowflakeId;
     }
 
@@ -25,7 +25,7 @@ public class SnowflakeIdResponseBody extends ResponseBody {
         return new SnowflakeIdResponseBody();
     }
 
-    public static SnowflakeIdResponseBody create(Long snowflakeId) {
+    public static SnowflakeIdResponseBody create(long snowflakeId) {
         return new SnowflakeIdResponseBody(snowflakeId);
     }
 

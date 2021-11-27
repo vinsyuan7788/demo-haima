@@ -3,6 +3,7 @@ package com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler;
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.AioDemoDuplexClientSocket;
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler.AioDemoDuplexClientSocketReadCompletionHandler.Attachment;
 import com.demo.haima.fundamental.utils.auxiliary.CompletionHandlerHelper;
+import com.demo.haima.fundamental.utils.data.network.definition.ByteBufferType;
 import com.demo.haima.fundamental.utils.data.network.definition.OperationType;
 import com.demo.haima.fundamental.utils.data.network.packet.Packet;
 import com.demo.haima.fundamental.utils.data.network.response.body.ResponseBody;
@@ -17,33 +18,35 @@ import org.slf4j.LoggerFactory;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Vince Yuan
  * @date 2021/11/24
  */
-public class AioDemoDuplexClientSocketReadCompletionHandler extends CompletionHandlerHelper implements CompletionHandler<Integer, Attachment> {
+public class AioDemoDuplexClientSocketReadCompletionHandler extends CompletionHandlerHelper implements CompletionHandler<Long, Attachment> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AioDemoDuplexClientSocketReadCompletionHandler.class);
 
     private AioDemoDuplexClientSocketWriteCompletionHandler writeCompletionHandler;
 
     @Override
-    public void completed(Integer numberOfBytesRead, Attachment attachment) {
+    public void completed(Long numberOfBytesRead, Attachment attachment) {
         try {
             // Get content from attachment
             AioDemoDuplexClientSocket clientSocket = attachment.getClientSocket();
-            ByteBuffer byteBuffer = attachment.getReadByteBuffer();
+            ByteBuffer byteBufferOfHeader = attachment.getReadByteBufferOfHeader();
+            ByteBuffer byteBufferOfBody = attachment.getReadByteBufferOfBody();
 
             // Check read event completion result
             if (numberOfBytesRead < 0) {
                 return;
             }
-            LOG.info("[Data] | Client reads bytes from server {} | bytes: {} | byte buffer read: {}", clientSocket.getServerAddressToConnect(), numberOfBytesRead, byteBuffer);
+            LOG.info("[Data] | Client reads bytes from server {} | bytes: {} | byte buffer of header read: {} | byte buffer of body read: {}", clientSocket.getServerAddressToConnect(), numberOfBytesRead, byteBufferOfHeader, byteBufferOfBody);
 
             // Read the data from the byte buffer
-            Packet packet = Packet.readOnClient(byteBuffer);
-            LOG.info("[Data] | Client reads packet from server {} | packet: {} | byte buffer read: {}", clientSocket.getServerAddressToConnect(), packet, byteBuffer);
+            Packet packet = Packet.readOnClient(byteBufferOfHeader, byteBufferOfBody);
+            LOG.info("[Data] | Client reads packet from server {} | packet: {} | byte buffer of header read: {} | byte buffer of body read: {}", clientSocket.getServerAddressToConnect(), packet, byteBufferOfHeader, byteBufferOfBody);
 
             // Process received packet
             processReceivedPacket(packet, clientSocket);
@@ -68,10 +71,10 @@ public class AioDemoDuplexClientSocketReadCompletionHandler extends CompletionHa
             clientSocket.getConnectionIdAndProcessingPacketMap().put(packetToSend.getRequestHeader().getConnectionId(), packetToSend);
             LOG.info("[Process] | Packet starts waiting to be processed | packet: {}", packetToSend);
 
-            // Get the byte buffer from packet
-            ByteBuffer bufferToWrite = packetToSend.getByteBuffer();
-            // Send the byte buffer to server
-            clientSocketChannel.write(bufferToWrite, AioDemoDuplexClientSocketWriteCompletionHandler.Attachment.create(clientSocket, packetToSend), writeCompletionHandler);
+            // Get the byte buffers from packet
+            ByteBuffer[] buffersToWrite = packetToSend.getByteBuffersOnClient(ByteBufferType.DIRECT);
+            // Gather-write the byte buffers to server
+            clientSocketChannel.write(buffersToWrite, 0, buffersToWrite.length, 30, TimeUnit.SECONDS, AioDemoDuplexClientSocketWriteCompletionHandler.Attachment.create(clientSocket, packetToSend), writeCompletionHandler);
         } catch (Throwable t) {
             handleRunningThrowable(t);
         }
@@ -140,23 +143,29 @@ public class AioDemoDuplexClientSocketReadCompletionHandler extends CompletionHa
     public static class Attachment {
 
         private AioDemoDuplexClientSocket clientSocket;
-        private ByteBuffer readByteBuffer;
+        private ByteBuffer readByteBufferOfHeader;
+        private ByteBuffer readByteBufferOfBody;
 
-        private Attachment(AioDemoDuplexClientSocket clientSocket, ByteBuffer byteBuffer) {
+        private Attachment(AioDemoDuplexClientSocket clientSocket, ByteBuffer byteBufferOfHeader, ByteBuffer byteBufferOfBody) {
             this.clientSocket = clientSocket;
-            this.readByteBuffer = byteBuffer;
+            this.readByteBufferOfHeader = byteBufferOfHeader;
+            this.readByteBufferOfBody = byteBufferOfBody;
         }
 
-        public static Attachment create(AioDemoDuplexClientSocket clientSocket, ByteBuffer byteBuffer) {
-            return new Attachment(clientSocket, byteBuffer);
+        public static Attachment create(AioDemoDuplexClientSocket clientSocket, ByteBuffer byteBufferOfHeader, ByteBuffer byteBufferOfBody) {
+            return new Attachment(clientSocket, byteBufferOfHeader, byteBufferOfBody);
         }
 
         public AioDemoDuplexClientSocket getClientSocket() {
             return clientSocket;
         }
 
-        public ByteBuffer getReadByteBuffer() {
-            return readByteBuffer;
+        public ByteBuffer getReadByteBufferOfHeader() {
+            return readByteBufferOfHeader;
+        }
+
+        public ByteBuffer getReadByteBufferOfBody() {
+            return readByteBufferOfBody;
         }
     }
 }

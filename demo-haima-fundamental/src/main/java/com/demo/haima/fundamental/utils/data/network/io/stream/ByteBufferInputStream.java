@@ -18,7 +18,8 @@ public class ByteBufferInputStream extends InputStream {
     @Override
     public int read() {
         if (byteBuffer.hasRemaining()) {
-            return byteBuffer.get();
+            // Why 0xff here: it may avoid the "EOF Exception" while reading long-typed value
+            return byteBuffer.get() & 0xff;
         } else {
             return -1;
         }

@@ -32,21 +32,19 @@ public class Packet {
     private RequestBody requestBody;
     private ResponseHeader responseHeader;
     private ResponseBody responseBody;
-    private ByteBuffer byteBuffer;
+
     private PacketProcessState packetProcessState;
     private long memoryAddress = VM.current().addressOf(this);
 
-    public Packet(RequestHeader requestHeader, RequestBody requestBody, ByteBuffer byteBuffer) {
+    public Packet(RequestHeader requestHeader, RequestBody requestBody) {
         this.requestHeader = requestHeader;
         this.requestBody = requestBody;
-        this.byteBuffer = byteBuffer;
         setPacketProcessState(PacketProcessState.INITIAL);
     }
 
-    public Packet(ResponseHeader responseHeader, ResponseBody responseBody, ByteBuffer byteBuffer) {
+    public Packet(ResponseHeader responseHeader, ResponseBody responseBody) {
         this.responseHeader = responseHeader;
         this.responseBody = responseBody;
-        this.byteBuffer = byteBuffer;
         setPacketProcessState(PacketProcessState.INITIAL);
     }
 
@@ -76,10 +74,6 @@ public class Packet {
         return responseBody;
     }
 
-    public ByteBuffer getByteBuffer() {
-        return byteBuffer;
-    }
-
     /***************************** State Machine *****************************/
 
     public void setPacketProcessState(PacketProcessState packetProcessState) {
@@ -90,48 +84,66 @@ public class Packet {
         return packetProcessState;
     }
 
-    /***************************** Utility Method *****************************/
+    /***************************** Packet Method *****************************/
 
     /**
-     * This method is used to create a packet from the request header and body
+     * This method is used to create a packet
      *
      * @param requestHeader
      * @param requestBody
-     * @param byteBufferType
      * @return
      */
-    public static Packet create(RequestHeader requestHeader, RequestBody requestBody, int byteBufferType) {
-
-        BinaryOutputWrapper outputWrapper = BinaryOutputWrapper.create();
-
-        requestHeader.serializeTo(outputWrapper);
-        requestBody.serializeTo(outputWrapper);
-
-        byte[] byteArray = outputWrapper.getByteArray();
-        ByteBuffer byteBuffer = createByteBuffer(byteArray, byteBufferType);
-
-        return new Packet(requestHeader, requestBody, byteBuffer);
+    public static Packet create(RequestHeader requestHeader, RequestBody requestBody) {
+        return new Packet(requestHeader, requestBody);
     }
 
     /**
-     * This method is used to create a packet from the response header and body
+     * This method is used to create a packet
      *
      * @param responseHeader
      * @param responseBody
+     * @return
+     */
+    public static Packet create(ResponseHeader responseHeader, ResponseBody responseBody) {
+        return new Packet(responseHeader, responseBody);
+    }
+
+    /***************************** Packet Method *****************************/
+
+    /**
+     * This method is used to get a byte buffer
+     *
      * @param byteBufferType
      * @return
      */
-    public static Packet create(ResponseHeader responseHeader, ResponseBody responseBody, int byteBufferType) {
+    public ByteBuffer getByteBufferOnClient(int byteBufferType) {
+        if (requestHeader == null || requestBody == null) {
+            throw new DemoException("Request header or body is null");
+        }
 
         BinaryOutputWrapper outputWrapper = BinaryOutputWrapper.create();
+        requestHeader.serializeTo(outputWrapper);
+        requestBody.serializeTo(outputWrapper);
+        byte[] byteArrayOfBody = outputWrapper.getByteArray();
+        return createByteBuffer(byteArrayOfBody, byteBufferType);
+    }
 
+    /**
+     * This method is used to get a byte buffers
+     *
+     * @param byteBufferType
+     * @return
+     */
+    public ByteBuffer getByteBufferOnServer(int byteBufferType) {
+        if (responseHeader == null || responseBody == null) {
+            throw new DemoException("Response header or body is null");
+        }
+
+        BinaryOutputWrapper outputWrapper = BinaryOutputWrapper.create();
         responseHeader.serializeTo(outputWrapper);
         responseBody.serializeTo(outputWrapper);
-
-        byte[] byteArray = outputWrapper.getByteArray();
-        ByteBuffer byteBuffer = createByteBuffer(byteArray, byteBufferType);
-
-        return new Packet(responseHeader, responseBody, byteBuffer);
+        byte[] byteArrayOfBody = outputWrapper.getByteArray();
+        return createByteBuffer(byteArrayOfBody, byteBufferType);
     }
 
     /**
@@ -141,6 +153,9 @@ public class Packet {
      * @return
      */
     public static Packet readOnServer(ByteBuffer byteBuffer) {
+        if (byteBuffer == null) {
+            throw new DemoException("Byte buffer is null");
+        }
 
         byteBuffer.flip();
         BinaryInputWrapper inputWrapper = BinaryInputWrapper.create(byteBuffer);
@@ -151,7 +166,7 @@ public class Packet {
         RequestBody body = createRequestBody(header);
         body.deserializeFrom(inputWrapper);
 
-        return new Packet(header, body, byteBuffer);
+        return new Packet(header, body);
     }
 
     /**
@@ -161,6 +176,9 @@ public class Packet {
      * @return
      */
     public static Packet readOnClient(ByteBuffer byteBuffer) {
+        if (byteBuffer == null) {
+            throw new DemoException("Byte buffer is null");
+        }
 
         byteBuffer.flip();
         BinaryInputWrapper inputWrapper = BinaryInputWrapper.create(byteBuffer);
@@ -171,8 +189,110 @@ public class Packet {
         ResponseBody body = createResponseBody(header);
         body.deserializeFrom(inputWrapper);
 
-        return new Packet(header, body, byteBuffer);
+        return new Packet(header, body);
     }
+
+    /************************ Packet Method (for gather-write and scatter-read) ************************/
+
+    /**
+     * This method is used to get byte buffers
+     *
+     * @param byteBufferType
+     * @return
+     */
+    public ByteBuffer[] getByteBuffersOnClient(int byteBufferType) {
+        if (requestHeader == null || requestBody == null) {
+            throw new DemoException("Request header or body is null");
+        }
+
+        BinaryOutputWrapper outputWrapper = BinaryOutputWrapper.create();
+        requestHeader.serializeTo(outputWrapper);
+        byte[] byteArrayOfHeader = outputWrapper.getByteArray();
+        ByteBuffer byteBufferOfHeader = createByteBuffer(byteArrayOfHeader, byteBufferType);
+
+        outputWrapper = BinaryOutputWrapper.create();
+        requestBody.serializeTo(outputWrapper);
+        byte[] byteArrayOfBody = outputWrapper.getByteArray();
+        ByteBuffer byteBufferOfBody = createByteBuffer(byteArrayOfBody, byteBufferType);
+
+        return new ByteBuffer[] { byteBufferOfHeader, byteBufferOfBody };
+    }
+
+    /**
+     * This method is used to get byte buffers
+     *
+     * @param byteBufferType
+     * @return
+     */
+    public ByteBuffer[] getByteBuffersOnServer(int byteBufferType) {
+        if (responseHeader == null || responseBody == null) {
+            throw new DemoException("Response header or body is null");
+        }
+
+        BinaryOutputWrapper outputWrapper = BinaryOutputWrapper.create();
+        responseHeader.serializeTo(outputWrapper);
+        byte[] byteArrayOfHeader = outputWrapper.getByteArray();
+        ByteBuffer byteBufferOfHeader = createByteBuffer(byteArrayOfHeader, byteBufferType);
+
+        outputWrapper = BinaryOutputWrapper.create();
+        responseBody.serializeTo(outputWrapper);
+        byte[] byteArrayOfBody = outputWrapper.getByteArray();
+        ByteBuffer byteBufferOfBody = createByteBuffer(byteArrayOfBody, byteBufferType);
+
+        return new ByteBuffer[] { byteBufferOfHeader, byteBufferOfBody };
+    }
+
+    /**
+     * This method is used to read the data carried by byte buffers to a packet
+     *
+     * @param byteBufferOfHeader
+     * @param byteBufferOfBody
+     * @return
+     */
+    public static Packet readOnClient(ByteBuffer byteBufferOfHeader, ByteBuffer byteBufferOfBody) {
+        if (byteBufferOfHeader == null || byteBufferOfBody == null) {
+            throw new DemoException("Byte buffer of header or body is null");
+        }
+
+        byteBufferOfHeader.flip();
+        BinaryInputWrapper inputWrapper = BinaryInputWrapper.create(byteBufferOfHeader);
+        ResponseHeader header = ResponseHeader.create();
+        header.deserializeFrom(inputWrapper);
+
+        byteBufferOfBody.flip();
+        inputWrapper = BinaryInputWrapper.create(byteBufferOfBody);
+        ResponseBody body = createResponseBody(header);
+        body.deserializeFrom(inputWrapper);
+
+        return new Packet(header, body);
+    }
+
+    /**
+     * This method is used to read the data carried by byte buffers to a packet
+     *
+     * @param byteBufferOfHeader
+     * @param byteBufferOfBody
+     * @return
+     */
+    public static Packet readOnServer(ByteBuffer byteBufferOfHeader, ByteBuffer byteBufferOfBody) {
+        if (byteBufferOfHeader == null || byteBufferOfBody == null) {
+            throw new DemoException("Byte buffer of header or body is null");
+        }
+
+        byteBufferOfHeader.flip();
+        BinaryInputWrapper inputWrapper = BinaryInputWrapper.create(byteBufferOfHeader);
+        RequestHeader header = RequestHeader.create();
+        header.deserializeFrom(inputWrapper);
+
+        byteBufferOfBody.flip();
+        inputWrapper = BinaryInputWrapper.create(byteBufferOfBody);
+        RequestBody body = createRequestBody(header);
+        body.deserializeFrom(inputWrapper);
+
+        return new Packet(header, body);
+    }
+
+    /***************************** Utility Method *****************************/
 
     /**
      * This method is sued to create a byte buffer
@@ -247,6 +367,8 @@ public class Packet {
         return responseBody;
     }
 
+    /***************************** Overridden Method *****************************/
+
     @Override
     public String toString() {
         return "Packet{" +
@@ -254,10 +376,8 @@ public class Packet {
                 ", requestBody=" + requestBody +
                 ", responseHeader=" + responseHeader +
                 ", responseBody=" + responseBody +
-                ", byteBuffer=" + byteBuffer +
                 ", packetProcessState=" + packetProcessState +
                 ", memoryAddress=" + memoryAddress +
                 '}';
     }
-
 }

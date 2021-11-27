@@ -23,24 +23,26 @@ import org.slf4j.LoggerFactory;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Vince Yuan
  * @date 2021/11/25
  */
-public class AioDemoDuplexServerSocketReadCompletionHandler extends CompletionHandlerHelper implements CompletionHandler<Integer, Attachment> {
+public class AioDemoDuplexServerSocketReadCompletionHandler extends CompletionHandlerHelper implements CompletionHandler<Long, Attachment> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AioDemoDuplexServerSocketReadCompletionHandler.class);
 
     private AioDemoDuplexServerSocketWriteCompletionHandler writeCompletionHandler;
 
     @Override
-    public void completed(Integer numberOfBytesRead, Attachment attachment) {
+    public void completed(Long numberOfBytesRead, Attachment attachment) {
         try {
             // Get content from attachment
             AioDemoDuplexServerSocket serverSocket = attachment.getServerSocket();
             AsynchronousSocketChannel acceptedSocketChannel = attachment.getAcceptedSocketChannel();
-            ByteBuffer byteBuffer = attachment.getReadByteBuffer();
+            ByteBuffer byteBufferOfHeader = attachment.getReadByteBufferOfHeader();
+            ByteBuffer byteBufferOfBody = attachment.getReadByteBufferOfBody();
 
             // Check read event completion result
             if (numberOfBytesRead < 0) {
@@ -49,16 +51,16 @@ public class AioDemoDuplexServerSocketReadCompletionHandler extends CompletionHa
             LOG.info("[Data] | Server reads bytes from client {} | bytes: {}", acceptedSocketChannel.getRemoteAddress(), numberOfBytesRead);
 
             // Read the data from the byte buffer
-            Packet packet = Packet.readOnServer(byteBuffer);
+            Packet packet = Packet.readOnServer(byteBufferOfHeader, byteBufferOfBody);
             LOG.info("[Data] | Server reads packet from client {} | packet: {}", acceptedSocketChannel.getRemoteAddress(), packet);
 
             // Process received packet and return a new one
             Packet packetToSend = processReceivedPacket(packet);
 
-            // Get the byte buffer from packet
-            ByteBuffer newBuffer = packetToSend.getByteBuffer();
-            // Send the byte buffer to client
-            acceptedSocketChannel.write(newBuffer, AioDemoDuplexServerSocketWriteCompletionHandler.Attachment.create(serverSocket, acceptedSocketChannel, packetToSend), writeCompletionHandler);
+            // Get the byte buffers from packet
+            ByteBuffer[] buffersToWrite = packetToSend.getByteBuffersOnServer(ByteBufferType.DIRECT);
+            // Gather-write the byte buffers to client
+            acceptedSocketChannel.write(buffersToWrite, 0, buffersToWrite.length, 30, TimeUnit.SECONDS, AioDemoDuplexServerSocketWriteCompletionHandler.Attachment.create(serverSocket, acceptedSocketChannel, packetToSend), writeCompletionHandler);
         } catch (Throwable t) {
             handleRunningThrowable(t);
         }
@@ -103,13 +105,11 @@ public class AioDemoDuplexServerSocketReadCompletionHandler extends CompletionHa
                 // Get request body
                 SnowflakeIdRequestBody snowflakeIdRequestBody = (SnowflakeIdRequestBody) requestBody;
                 // Perform business processing here
-                Long snowflakeId = null;
                 SnowFlakeIdWorker snowFlakeIdWorker = SnowFlakeIdWorkerFactory.getWorker(snowflakeIdRequestBody.getAppCode());
                 if (snowFlakeIdWorker == null) {
                     LOG.error("Snowflake ID worker is null");
-                } else {
-                    snowflakeId = snowFlakeIdWorker.getNextId();
                 }
+                long snowflakeId = snowFlakeIdWorker.getNextId();
                 LOG.info("[Business] | Server completes processing data | app code: {}", snowflakeIdRequestBody.getAppCode());
                 // Create a corresponding response body
                 responseBody = SnowflakeIdResponseBody.create(snowflakeId);
@@ -122,7 +122,7 @@ public class AioDemoDuplexServerSocketReadCompletionHandler extends CompletionHa
         // Create a response header for the packet to return
         ResponseHeader responseHeader = ResponseHeader.create(connectionId, operationType);
         // Return a new packet to send to client
-        Packet packet = Packet.create(responseHeader, responseBody, ByteBufferType.DIRECT);
+        Packet packet = Packet.create(responseHeader, responseBody);
         LOG.info("[Process] | Server generates a new packet to send | packet: {}", packet);
         return packet;
     }
@@ -131,16 +131,18 @@ public class AioDemoDuplexServerSocketReadCompletionHandler extends CompletionHa
 
         private AioDemoDuplexServerSocket serverSocket;
         private AsynchronousSocketChannel acceptedSocketChannel;
-        public ByteBuffer readByteBuffer;
+        public ByteBuffer readByteBufferOfHeader;
+        public ByteBuffer readByteBufferOfBody;
 
-        private Attachment(AioDemoDuplexServerSocket serverSocket, AsynchronousSocketChannel acceptedSocketChannel, ByteBuffer byteBuffer) {
+        private Attachment(AioDemoDuplexServerSocket serverSocket, AsynchronousSocketChannel acceptedSocketChannel, ByteBuffer byteBufferOfHeader, ByteBuffer byteBufferOfBody) {
             this.serverSocket = serverSocket;
             this.acceptedSocketChannel = acceptedSocketChannel;
-            this.readByteBuffer = byteBuffer;
+            this.readByteBufferOfHeader = byteBufferOfHeader;
+            this.readByteBufferOfBody = byteBufferOfBody;
         }
 
-        public static Attachment create(AioDemoDuplexServerSocket serverSocket, AsynchronousSocketChannel acceptedSocketChannel, ByteBuffer byteBuffer) {
-            return new Attachment(serverSocket, acceptedSocketChannel, byteBuffer);
+        public static Attachment create(AioDemoDuplexServerSocket serverSocket, AsynchronousSocketChannel acceptedSocketChannel, ByteBuffer byteBufferOfHeader, ByteBuffer byteBufferOfBody) {
+            return new Attachment(serverSocket, acceptedSocketChannel, byteBufferOfHeader, byteBufferOfBody);
         }
 
         public AioDemoDuplexServerSocket getServerSocket() {
@@ -151,8 +153,12 @@ public class AioDemoDuplexServerSocketReadCompletionHandler extends CompletionHa
             return acceptedSocketChannel;
         }
 
-        public ByteBuffer getReadByteBuffer() {
-            return readByteBuffer;
+        public ByteBuffer getReadByteBufferOfHeader() {
+            return readByteBufferOfHeader;
+        }
+
+        public ByteBuffer getReadByteBufferOfBody() {
+            return readByteBufferOfBody;
         }
     }
 }
