@@ -13,6 +13,7 @@
         <module>demo-haima-test</module>
         <module>demo-haima-common</module>
         <module>demo-haima-client</module>
+        <module>demo-haima-fundamental</module>
     </modules>
     <name>demo-haima</name>
     <description>Demo application to provide snowflake ID as middle-ware</description>
@@ -31,6 +32,8 @@
         <demo-haima-common.version>1.0.0-SNAPSHOT</demo-haima-common.version>
         <demo-haima-client.version>1.0.0-SNAPSHOT</demo-haima-client.version>
         <demo-haima-server.version>1.0.0-SNAPSHOT</demo-haima-server.version>
+        <demo-haima-fundamental.version>1.0.0-SNAPSHOT</demo-haima-fundamental.version>
+
     </properties>
 
     <dependencyManagement>
@@ -92,6 +95,12 @@
                 <groupId>com.demo</groupId>
                 <artifactId>demo-haima-server</artifactId>
                 <version>${demo-haima-server.version}</version>
+            </dependency>
+            <!-- demo-haima-fundamental -->
+            <dependency>
+                <groupId>com.demo</groupId>
+                <artifactId>demo-haima-fundamental</artifactId>
+                <version>${demo-haima-fundamental.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

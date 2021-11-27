@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>demo-haima-test</artifactId>
+    <artifactId>demo-haima-fundamental</artifactId>
 
     <dependencies>
         <!-- Testing Suite -->
@@ -29,20 +29,26 @@
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
 
-        <!-- demo-haima-client -->
+        <!-- Web Socket -->
         <dependency>
-            <groupId>com.demo</groupId>
-            <artifactId>demo-haima-client</artifactId>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
         </dependency>
-        <!-- demo-haima-server -->
         <dependency>
-            <groupId>com.demo</groupId>
-            <artifactId>demo-haima-server</artifactId>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
         </dependency>
-        <!-- demo-haima-fundamental -->
+
+        <!-- Java Object Layout -->
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+        </dependency>
+
+        <!-- demo-haima-common -->
         <dependency>
             <groupId>com.demo</groupId>
-            <artifactId>demo-haima-fundamental</artifactId>
+            <artifactId>demo-haima-common</artifactId>
         </dependency>
     </dependencies>
 </project>
