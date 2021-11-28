@@ -248,7 +248,7 @@ public class NioDemoDuplexServerSocket extends ContainerRunner implements Runnab
         Packet packetToSend = (Packet) selectedKey.attachment();
 
         // Get the byte buffers from packet
-        ByteBuffer[] byteBuffers = packetToSend.getByteBuffersOnServer(ByteBufferType.DIRECT);
+        ByteBuffer[] byteBuffers = packetToSend.createByteBuffersOnServer(ByteBufferType.DIRECT);
         // Gather-write the byte buffers to client
         long numberOfBytesWritten = acceptedSocketChannel.write(byteBuffers);
         if (numberOfBytesWritten < 0) {

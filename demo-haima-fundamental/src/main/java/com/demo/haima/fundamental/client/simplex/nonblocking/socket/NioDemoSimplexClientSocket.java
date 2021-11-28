@@ -230,7 +230,7 @@ public class NioDemoSimplexClientSocket extends ContainerRunner implements Runna
         LOG.info("[Process] | Packet is waiting for being processed | packet: {}", packetToSend);
 
         // Get the byte buffers from packet
-        ByteBuffer[] byteBuffers = packetToSend.getByteBuffersOnClient(ByteBufferType.DIRECT);
+        ByteBuffer[] byteBuffers = packetToSend.createByteBuffersOnClient(ByteBufferType.DIRECT);
         // Gather-write the byte buffers to server
         long numberOfBytesWritten = clientSocketChannel.write(byteBuffers);
         if (numberOfBytesWritten < 0) {

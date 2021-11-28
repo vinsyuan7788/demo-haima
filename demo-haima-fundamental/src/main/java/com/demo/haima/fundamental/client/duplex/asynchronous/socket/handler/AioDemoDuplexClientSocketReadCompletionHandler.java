@@ -72,7 +72,7 @@ public class AioDemoDuplexClientSocketReadCompletionHandler extends CompletionHa
             LOG.info("[Process] | Packet starts waiting to be processed | packet: {}", packetToSend);
 
             // Get the byte buffers from packet
-            ByteBuffer[] buffersToWrite = packetToSend.getByteBuffersOnClient(ByteBufferType.DIRECT);
+            ByteBuffer[] buffersToWrite = packetToSend.createByteBuffersOnClient(ByteBufferType.DIRECT);
             // Gather-write the byte buffers to server
             clientSocketChannel.write(buffersToWrite, 0, buffersToWrite.length, 30, TimeUnit.SECONDS, AioDemoDuplexClientSocketWriteCompletionHandler.Attachment.create(clientSocket, packetToSend), writeCompletionHandler);
         } catch (Throwable t) {

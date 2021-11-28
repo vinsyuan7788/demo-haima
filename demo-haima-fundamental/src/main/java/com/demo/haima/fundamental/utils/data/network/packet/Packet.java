@@ -84,7 +84,7 @@ public class Packet {
         return packetProcessState;
     }
 
-    /***************************** Packet Method *****************************/
+    /***************************** Constructor Method *****************************/
 
     /**
      * This method is used to create a packet
@@ -111,12 +111,12 @@ public class Packet {
     /***************************** Packet Method *****************************/
 
     /**
-     * This method is used to get a byte buffer
+     * This method is used to create a byte buffer
      *
      * @param byteBufferType
      * @return
      */
-    public ByteBuffer getByteBufferOnClient(int byteBufferType) {
+    public ByteBuffer createByteBufferOnClient(int byteBufferType) {
         if (requestHeader == null || requestBody == null) {
             throw new DemoException("Request header or body is null");
         }
@@ -129,12 +129,12 @@ public class Packet {
     }
 
     /**
-     * This method is used to get a byte buffers
+     * This method is used to create a byte buffers
      *
      * @param byteBufferType
      * @return
      */
-    public ByteBuffer getByteBufferOnServer(int byteBufferType) {
+    public ByteBuffer createByteBufferOnServer(int byteBufferType) {
         if (responseHeader == null || responseBody == null) {
             throw new DemoException("Response header or body is null");
         }
@@ -144,29 +144,6 @@ public class Packet {
         responseBody.serializeTo(outputWrapper);
         byte[] byteArrayOfBody = outputWrapper.getByteArray();
         return createByteBuffer(byteArrayOfBody, byteBufferType);
-    }
-
-    /**
-     * This method is used to read the byte buffer received by server to packet
-     *
-     * @param byteBuffer
-     * @return
-     */
-    public static Packet readOnServer(ByteBuffer byteBuffer) {
-        if (byteBuffer == null) {
-            throw new DemoException("Byte buffer is null");
-        }
-
-        byteBuffer.flip();
-        BinaryInputWrapper inputWrapper = BinaryInputWrapper.create(byteBuffer);
-
-        RequestHeader header = RequestHeader.create();
-        header.deserializeFrom(inputWrapper);
-
-        RequestBody body = createRequestBody(header);
-        body.deserializeFrom(inputWrapper);
-
-        return new Packet(header, body);
     }
 
     /**
@@ -192,15 +169,38 @@ public class Packet {
         return new Packet(header, body);
     }
 
+    /**
+     * This method is used to read the byte buffer received by server to packet
+     *
+     * @param byteBuffer
+     * @return
+     */
+    public static Packet readOnServer(ByteBuffer byteBuffer) {
+        if (byteBuffer == null) {
+            throw new DemoException("Byte buffer is null");
+        }
+
+        byteBuffer.flip();
+        BinaryInputWrapper inputWrapper = BinaryInputWrapper.create(byteBuffer);
+
+        RequestHeader header = RequestHeader.create();
+        header.deserializeFrom(inputWrapper);
+
+        RequestBody body = createRequestBody(header);
+        body.deserializeFrom(inputWrapper);
+
+        return new Packet(header, body);
+    }
+
     /************************ Packet Method (for gather-write and scatter-read) ************************/
 
     /**
-     * This method is used to get byte buffers
+     * This method is used to create byte buffers
      *
      * @param byteBufferType
      * @return
      */
-    public ByteBuffer[] getByteBuffersOnClient(int byteBufferType) {
+    public ByteBuffer[] createByteBuffersOnClient(int byteBufferType) {
         if (requestHeader == null || requestBody == null) {
             throw new DemoException("Request header or body is null");
         }
@@ -219,12 +219,12 @@ public class Packet {
     }
 
     /**
-     * This method is used to get byte buffers
+     * This method is used to create byte buffers
      *
      * @param byteBufferType
      * @return
      */
-    public ByteBuffer[] getByteBuffersOnServer(int byteBufferType) {
+    public ByteBuffer[] createByteBuffersOnServer(int byteBufferType) {
         if (responseHeader == null || responseBody == null) {
             throw new DemoException("Response header or body is null");
         }

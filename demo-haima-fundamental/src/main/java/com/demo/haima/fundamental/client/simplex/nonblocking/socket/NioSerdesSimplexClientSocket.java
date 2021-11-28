@@ -81,7 +81,7 @@ public class NioSerdesSimplexClientSocket extends ContainerRunner implements Run
                 logSocketChannelInfo(clientSocketChannel);
 
                 // Get the byte buffer from packet
-                ByteBuffer byteBuffer = packetToSend.getByteBufferOnClient(ByteBufferType.DIRECT);
+                ByteBuffer byteBuffer = packetToSend.createByteBufferOnClient(ByteBufferType.DIRECT);
                 // Send the byte buffer to server
                 int numberOfBytesWritten = clientSocketChannel.write(byteBuffer);
                 if (numberOfBytesWritten < 0) {
