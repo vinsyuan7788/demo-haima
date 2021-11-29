@@ -33,7 +33,6 @@
         <demo-haima-client.version>1.0.0-SNAPSHOT</demo-haima-client.version>
         <demo-haima-server.version>1.0.0-SNAPSHOT</demo-haima-server.version>
         <demo-haima-fundamental.version>1.0.0-SNAPSHOT</demo-haima-fundamental.version>
-
     </properties>
 
     <dependencyManagement>
