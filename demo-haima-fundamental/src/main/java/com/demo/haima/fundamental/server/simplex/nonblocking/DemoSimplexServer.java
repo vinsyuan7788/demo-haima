@@ -1,6 +1,6 @@
 package com.demo.haima.fundamental.server.simplex.nonblocking;
 
-import com.demo.haima.fundamental.utils.state.server.nonblocking.ServerState;
+import com.demo.haima.fundamental.utility.state.server.nonblocking.ServerState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

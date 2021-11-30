@@ -1,6 +1,6 @@
 package com.demo.haima.fundamental.server.duplex.nonblocking.socket;
 
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
 
 import java.nio.channels.SelectionKey;
 

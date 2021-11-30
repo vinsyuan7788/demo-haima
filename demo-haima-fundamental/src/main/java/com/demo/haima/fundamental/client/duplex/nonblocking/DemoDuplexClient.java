@@ -1,6 +1,6 @@
 package com.demo.haima.fundamental.client.duplex.nonblocking;
 
-import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientState;
+import com.demo.haima.fundamental.utility.state.client.nonblocking.ClientState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,7 @@
 package com.demo.haima.fundamental.client.simplex.nonblocking.socket;
 
 import com.demo.haima.fundamental.server.simplex.nonblocking.socket.DemoSimplexServerSocket;
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
 
 import java.net.SocketException;
 import java.nio.channels.SelectionKey;

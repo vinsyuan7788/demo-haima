@@ -1,8 +1,8 @@
 package com.demo.haima.fundamental.client.duplex.nonblocking.socket;
 
 import com.demo.haima.fundamental.server.duplex.nonblocking.socket.DemoDuplexServerSocket;
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
-import com.demo.haima.fundamental.utils.data.network.response.body.ResponseBody;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.response.body.ResponseBody;
 
 import java.net.SocketException;
 import java.nio.channels.SelectionKey;

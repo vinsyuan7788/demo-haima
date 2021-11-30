@@ -2,8 +2,8 @@ package com.demo.haima.fundamental.server.duplex.asynchronous.socket.handler;
 
 import com.demo.haima.fundamental.server.duplex.asynchronous.socket.AioDemoDuplexServerSocket;
 import com.demo.haima.fundamental.server.duplex.asynchronous.socket.handler.AioDemoDuplexServerSocketWriteCompletionHandler.Attachment;
-import com.demo.haima.fundamental.utils.auxiliary.CompletionHandlerHelper;
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.auxiliary.CompletionHandlerHelper;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

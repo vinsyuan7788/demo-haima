@@ -4,8 +4,8 @@ import com.demo.haima.fundamental.client.duplex.asynchronous.AioDemoDuplexClient
 import com.demo.haima.fundamental.client.duplex.asynchronous.DemoDuplexClient;
 import com.demo.haima.fundamental.server.duplex.asynchronous.AioDemoDuplexServer;
 import com.demo.haima.fundamental.server.duplex.asynchronous.DemoDuplexServer;
-import com.demo.haima.fundamental.utils.state.client.asynchronous.ClientState;
-import com.demo.haima.fundamental.utils.state.server.asynchronous.ServerState;
+import com.demo.haima.fundamental.utility.state.client.asynchronous.ClientState;
+import com.demo.haima.fundamental.utility.state.server.asynchronous.ServerState;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

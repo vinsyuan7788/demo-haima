@@ -3,7 +3,7 @@ package com.demo.haima.fundamental.server.simplex.asynchronous;
 import com.demo.haima.common.utility.LogUtils;
 import com.demo.haima.fundamental.server.simplex.asynchronous.socket.AioBaseSimplexServerSocket;
 import com.demo.haima.fundamental.server.simplex.asynchronous.socket.BaseSimplexServerSocket;
-import com.demo.haima.fundamental.utils.auxiliary.AioImplementationWay;
+import com.demo.haima.fundamental.utility.auxiliary.AioImplementationWay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

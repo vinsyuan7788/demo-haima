@@ -4,8 +4,8 @@ import com.demo.haima.fundamental.client.simplex.nonblocking.NioSerdesSimplexCli
 import com.demo.haima.fundamental.client.simplex.nonblocking.SerdesSimplexClient;
 import com.demo.haima.fundamental.server.simplex.nonblocking.NioSerdesSimplexServer;
 import com.demo.haima.fundamental.server.simplex.nonblocking.SerdesSimplexServer;
-import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientState;
-import com.demo.haima.fundamental.utils.state.server.nonblocking.ServerState;
+import com.demo.haima.fundamental.utility.state.client.nonblocking.ClientState;
+import com.demo.haima.fundamental.utility.state.server.nonblocking.ServerState;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

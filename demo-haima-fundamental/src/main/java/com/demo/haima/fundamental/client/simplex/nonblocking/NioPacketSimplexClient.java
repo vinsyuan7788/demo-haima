@@ -3,9 +3,9 @@ package com.demo.haima.fundamental.client.simplex.nonblocking;
 import com.demo.haima.common.utility.LogUtils;
 import com.demo.haima.fundamental.client.simplex.nonblocking.socket.NioPacketSimplexClientSocket;
 import com.demo.haima.fundamental.client.simplex.nonblocking.socket.PacketSimplexClientSocket;
-import com.demo.haima.fundamental.utils.data.network.base.header.DataTypeCode;
-import com.demo.haima.fundamental.utils.data.network.base.packet.Packet;
-import com.demo.haima.fundamental.utils.data.network.base.packet.PacketUtils;
+import com.demo.haima.fundamental.utility.data.network.base.header.DataTypeCode;
+import com.demo.haima.fundamental.utility.data.network.base.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.base.packet.PacketUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

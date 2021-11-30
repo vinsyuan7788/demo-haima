@@ -4,12 +4,12 @@ import com.demo.haima.fundamental.client.duplex.asynchronous.DemoDuplexClient;
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler.AioDemoDuplexClientSocketConnectCompletionHandler;
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler.AioDemoDuplexClientSocketReadCompletionHandler;
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler.AioDemoDuplexClientSocketWriteCompletionHandler;
-import com.demo.haima.fundamental.utils.auxiliary.ContainerRunner;
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
-import com.demo.haima.fundamental.utils.data.network.response.body.ResponseBody;
-import com.demo.haima.fundamental.utils.exception.DemoException;
-import com.demo.haima.fundamental.utils.state.client.asynchronous.ClientSocketState;
-import com.demo.haima.fundamental.utils.state.client.asynchronous.ClientState;
+import com.demo.haima.fundamental.utility.auxiliary.ContainerRunner;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.response.body.ResponseBody;
+import com.demo.haima.fundamental.utility.exception.DemoException;
+import com.demo.haima.fundamental.utility.state.client.asynchronous.ClientSocketState;
+import com.demo.haima.fundamental.utility.state.client.asynchronous.ClientState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

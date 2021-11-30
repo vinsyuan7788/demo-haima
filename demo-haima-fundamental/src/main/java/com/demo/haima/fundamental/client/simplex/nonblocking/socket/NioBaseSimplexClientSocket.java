@@ -1,7 +1,7 @@
 package com.demo.haima.fundamental.client.simplex.nonblocking.socket;
 
-import com.demo.haima.fundamental.utils.auxiliary.ContainerRunner;
-import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientSocketState;
+import com.demo.haima.fundamental.utility.auxiliary.ContainerRunner;
+import com.demo.haima.fundamental.utility.state.client.nonblocking.ClientSocketState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

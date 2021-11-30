@@ -1,6 +1,6 @@
 package com.demo.haima.fundamental.server.duplex.asynchronous;
 
-import com.demo.haima.fundamental.utils.state.server.asynchronous.ServerState;
+import com.demo.haima.fundamental.utility.state.server.asynchronous.ServerState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -64,6 +64,8 @@
                 <version>${javax.websocket-api.version}</version>
                 <scope>provided</scope>
             </dependency>
+
+            <!-- Java EE -->
             <dependency>
                 <groupId>javax</groupId>
                 <artifactId>javaee-api</artifactId>

@@ -1,12 +1,12 @@
 package com.demo.haima.fundamental.client.simplex.nonblocking.socket;
 
 import com.demo.haima.fundamental.client.simplex.nonblocking.DemoSimplexClient;
-import com.demo.haima.fundamental.utils.data.network.definition.ByteBufferType;
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
-import com.demo.haima.fundamental.utils.auxiliary.ContainerRunner;
-import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientSocketState;
-import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientState;
-import com.demo.haima.fundamental.utils.state.packet.PacketProcessState;
+import com.demo.haima.fundamental.utility.data.network.definition.ByteBufferType;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.auxiliary.ContainerRunner;
+import com.demo.haima.fundamental.utility.state.client.nonblocking.ClientSocketState;
+import com.demo.haima.fundamental.utility.state.client.nonblocking.ClientState;
+import com.demo.haima.fundamental.utility.state.packet.PacketProcessState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

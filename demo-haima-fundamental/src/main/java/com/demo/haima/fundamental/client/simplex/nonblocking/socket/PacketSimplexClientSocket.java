@@ -1,6 +1,6 @@
 package com.demo.haima.fundamental.client.simplex.nonblocking.socket;
 
-import com.demo.haima.fundamental.utils.data.network.base.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.base.packet.Packet;
 
 /**
  * @author Vince Yuan

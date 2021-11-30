@@ -1,7 +1,7 @@
 package com.demo.haima.fundamental.client.simplex.nonblocking.socket;
 
 import com.demo.haima.fundamental.client.simplex.nonblocking.NioSerdesSimplexClient;
-import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientState;
+import com.demo.haima.fundamental.utility.state.client.nonblocking.ClientState;
 
 import java.net.SocketException;
 import java.nio.channels.ClosedChannelException;

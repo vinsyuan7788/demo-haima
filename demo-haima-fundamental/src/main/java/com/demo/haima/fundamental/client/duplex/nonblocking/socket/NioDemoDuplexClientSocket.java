@@ -1,18 +1,18 @@
 package com.demo.haima.fundamental.client.duplex.nonblocking.socket;
 
 import com.demo.haima.fundamental.client.duplex.nonblocking.DemoDuplexClient;
-import com.demo.haima.fundamental.utils.auxiliary.ContainerRunner;
-import com.demo.haima.fundamental.utils.data.network.definition.ByteBufferType;
-import com.demo.haima.fundamental.utils.data.network.definition.OperationType;
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
-import com.demo.haima.fundamental.utils.data.network.response.body.ResponseBody;
-import com.demo.haima.fundamental.utils.data.network.response.body.SnowflakeIdResponseBody;
-import com.demo.haima.fundamental.utils.data.network.response.body.TransmitDataResponseBody;
-import com.demo.haima.fundamental.utils.data.network.response.header.ResponseHeader;
-import com.demo.haima.fundamental.utils.exception.DemoException;
-import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientSocketState;
-import com.demo.haima.fundamental.utils.state.client.nonblocking.ClientState;
-import com.demo.haima.fundamental.utils.state.packet.PacketProcessState;
+import com.demo.haima.fundamental.utility.auxiliary.ContainerRunner;
+import com.demo.haima.fundamental.utility.data.network.definition.ByteBufferType;
+import com.demo.haima.fundamental.utility.data.network.definition.OperationType;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.response.body.ResponseBody;
+import com.demo.haima.fundamental.utility.data.network.response.body.SnowflakeIdResponseBody;
+import com.demo.haima.fundamental.utility.data.network.response.body.TransmitDataResponseBody;
+import com.demo.haima.fundamental.utility.data.network.response.header.ResponseHeader;
+import com.demo.haima.fundamental.utility.exception.DemoException;
+import com.demo.haima.fundamental.utility.state.client.nonblocking.ClientSocketState;
+import com.demo.haima.fundamental.utility.state.client.nonblocking.ClientState;
+import com.demo.haima.fundamental.utility.state.packet.PacketProcessState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -4,11 +4,11 @@ import com.demo.haima.common.utility.LogUtils;
 import com.demo.haima.fundamental.client.duplex.nonblocking.NioDemoDuplexClient;
 import com.demo.haima.fundamental.client.simplex.nonblocking.socket.DemoSimplexClientSocket;
 import com.demo.haima.fundamental.client.simplex.nonblocking.socket.NioDemoSimplexClientSocket;
-import com.demo.haima.fundamental.utils.data.network.definition.OperationType;
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
-import com.demo.haima.fundamental.utils.data.network.request.body.RequestBody;
-import com.demo.haima.fundamental.utils.data.network.request.body.TransmitDataRequestBody;
-import com.demo.haima.fundamental.utils.data.network.request.header.RequestHeader;
+import com.demo.haima.fundamental.utility.data.network.definition.OperationType;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.request.body.RequestBody;
+import com.demo.haima.fundamental.utility.data.network.request.body.TransmitDataRequestBody;
+import com.demo.haima.fundamental.utility.data.network.request.header.RequestHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

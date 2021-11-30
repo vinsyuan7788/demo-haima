@@ -2,16 +2,16 @@ package com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler;
 
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.AioDemoDuplexClientSocket;
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler.AioDemoDuplexClientSocketReadCompletionHandler.Attachment;
-import com.demo.haima.fundamental.utils.auxiliary.CompletionHandlerHelper;
-import com.demo.haima.fundamental.utils.data.network.definition.ByteBufferType;
-import com.demo.haima.fundamental.utils.data.network.definition.OperationType;
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
-import com.demo.haima.fundamental.utils.data.network.response.body.ResponseBody;
-import com.demo.haima.fundamental.utils.data.network.response.body.SnowflakeIdResponseBody;
-import com.demo.haima.fundamental.utils.data.network.response.body.TransmitDataResponseBody;
-import com.demo.haima.fundamental.utils.data.network.response.header.ResponseHeader;
-import com.demo.haima.fundamental.utils.exception.DemoException;
-import com.demo.haima.fundamental.utils.state.packet.PacketProcessState;
+import com.demo.haima.fundamental.utility.auxiliary.CompletionHandlerHelper;
+import com.demo.haima.fundamental.utility.data.network.definition.ByteBufferType;
+import com.demo.haima.fundamental.utility.data.network.definition.OperationType;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.response.body.ResponseBody;
+import com.demo.haima.fundamental.utility.data.network.response.body.SnowflakeIdResponseBody;
+import com.demo.haima.fundamental.utility.data.network.response.body.TransmitDataResponseBody;
+import com.demo.haima.fundamental.utility.data.network.response.header.ResponseHeader;
+import com.demo.haima.fundamental.utility.exception.DemoException;
+import com.demo.haima.fundamental.utility.state.packet.PacketProcessState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

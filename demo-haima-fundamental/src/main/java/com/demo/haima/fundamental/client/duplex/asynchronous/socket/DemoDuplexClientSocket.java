@@ -1,7 +1,7 @@
 package com.demo.haima.fundamental.client.duplex.asynchronous.socket;
 
-import com.demo.haima.fundamental.utils.data.network.packet.Packet;
-import com.demo.haima.fundamental.utils.data.network.response.body.ResponseBody;
+import com.demo.haima.fundamental.utility.data.network.packet.Packet;
+import com.demo.haima.fundamental.utility.data.network.response.body.ResponseBody;
 
 import java.nio.channels.AsynchronousSocketChannel;
 

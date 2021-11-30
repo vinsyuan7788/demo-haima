@@ -4,7 +4,7 @@ import com.demo.haima.fundamental.client.simplex.asynchronous.AioBaseSimplexClie
 import com.demo.haima.fundamental.client.simplex.asynchronous.BaseSimplexClient;
 import com.demo.haima.fundamental.server.simplex.asynchronous.AioBaseSimplexServer;
 import com.demo.haima.fundamental.server.simplex.asynchronous.BaseSimplexServer;
-import com.demo.haima.fundamental.utils.auxiliary.AioImplementationWay;
+import com.demo.haima.fundamental.utility.auxiliary.AioImplementationWay;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
