@@ -29,6 +29,7 @@
         <javax.websocket-api.version>1.1</javax.websocket-api.version>
         <javaee-api.version>7.0</javaee-api.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+        <jol-core.version>0.16</jol-core.version>
         <!-- Versions for Custom Dependencies -->
         <demo-haima-common.version>1.0.0-SNAPSHOT</demo-haima-common.version>
         <demo-haima-client.version>1.0.0-SNAPSHOT</demo-haima-client.version>
@@ -84,7 +85,7 @@
             <dependency>
                 <groupId>org.openjdk.jol</groupId>
                 <artifactId>jol-core</artifactId>
-                <version>0.16</version>
+                <version>${jol-core.version}</version>
             </dependency>
 
             <!-- demo-haima-common -->

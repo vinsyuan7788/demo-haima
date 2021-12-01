@@ -169,11 +169,11 @@ public class NioDemoSimplexClientSocket extends ContainerRunner implements Runna
             if (selectedKey.isAcceptable()) {
                 processAcceptEvent(selectedKey);
             } else if (selectedKey.isConnectable()) {
-                processConnectableEvent(selectedKey);
+                processConnectEvent(selectedKey);
             } else if (selectedKey.isReadable()) {
                 processReadEvent(selectedKey);
             } else if (selectedKey.isWritable()) {
-                processWritableEvent(selectedKey);
+                processWriteEvent(selectedKey);
             }
         }
         selectedKeys.clear();
@@ -185,7 +185,7 @@ public class NioDemoSimplexClientSocket extends ContainerRunner implements Runna
     }
 
     @Override
-    public void processConnectableEvent(SelectionKey selectedKey) throws Exception {
+    public void processConnectEvent(SelectionKey selectedKey) throws Exception {
         // Get the client socket channel that finishes connecting to server
         SocketChannel clientSocketChannel = (SocketChannel) selectedKey.channel();
         if (clientSocketChannel == null) {
@@ -209,7 +209,7 @@ public class NioDemoSimplexClientSocket extends ContainerRunner implements Runna
     }
 
     @Override
-    public void processWritableEvent(SelectionKey selectedKey) throws Exception {
+    public void processWriteEvent(SelectionKey selectedKey) throws Exception {
         // Get the client socket channel
         SocketChannel clientSocketChannel = (SocketChannel) selectedKey.channel();
         if (clientSocketChannel == null) {

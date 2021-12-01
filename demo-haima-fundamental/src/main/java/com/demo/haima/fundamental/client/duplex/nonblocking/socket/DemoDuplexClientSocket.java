@@ -71,7 +71,7 @@ public interface DemoDuplexClientSocket extends BaseDuplexClientSocket {
      * @param selectedKey
      * @throws Exception
      */
-    void processConnectableEvent(SelectionKey selectedKey) throws Exception;
+    void processConnectEvent(SelectionKey selectedKey) throws Exception;
 
     /**
      * This method is used to process read event
@@ -87,7 +87,7 @@ public interface DemoDuplexClientSocket extends BaseDuplexClientSocket {
      * @param selectedKey
      * @throws Exception
      */
-    void processWritableEvent(SelectionKey selectedKey) throws Exception;
+    void processWriteEvent(SelectionKey selectedKey) throws Exception;
 
     /**
      * This method is used to process the received packet

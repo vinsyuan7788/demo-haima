@@ -147,11 +147,11 @@ public class NioDemoSimplexServerSocket extends ContainerRunner implements Runna
             if (selectedKey.isAcceptable()) {
                 processAcceptEvent(selectedKey);
             } else if (selectedKey.isConnectable()) {
-                processConnectableEvent(selectedKey);
+                processConnectEvent(selectedKey);
             } else if (selectedKey.isReadable()) {
                 processReadEvent(selectedKey);
             } else if (selectedKey.isWritable()) {
-                processWritableEvent(selectedKey);
+                processWriteEvent(selectedKey);
             }
         }
         selectedKeys.clear();
@@ -192,7 +192,7 @@ public class NioDemoSimplexServerSocket extends ContainerRunner implements Runna
     }
 
     @Override
-    public void processConnectableEvent(SelectionKey selectedKey) throws Exception {
+    public void processConnectEvent(SelectionKey selectedKey) throws Exception {
         // Do nothing here
     }
 
@@ -231,7 +231,7 @@ public class NioDemoSimplexServerSocket extends ContainerRunner implements Runna
     }
 
     @Override
-    public void processWritableEvent(SelectionKey selectedKey) throws Exception {
+    public void processWriteEvent(SelectionKey selectedKey) throws Exception {
         // Do nothing here
     }
 
