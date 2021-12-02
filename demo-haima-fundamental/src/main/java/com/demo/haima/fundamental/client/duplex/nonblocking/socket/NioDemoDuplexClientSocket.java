@@ -211,8 +211,10 @@ public class NioDemoDuplexClientSocket extends ContainerRunner implements Runnab
         logSocketChannelInfo(clientSocketChannel);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         registeredKey = clientSocketChannel.register(selector, SelectionKey.OP_WRITE);
-        logSelectionKeyInfo(selectedKey, "connect", registeredKey, "write");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
     }
 
     @Override
@@ -241,8 +243,10 @@ public class NioDemoDuplexClientSocket extends ContainerRunner implements Runnab
         processReceivedPacket(packet);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = clientSocketChannel.register(selector, SelectionKey.OP_WRITE);
-        logSelectionKeyInfo(selectedKey, "read", registeredKey, "write");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
 
         // Close the client socket channel
 //        selectedKey.cancel();
@@ -281,8 +285,10 @@ public class NioDemoDuplexClientSocket extends ContainerRunner implements Runnab
         LOG.info("[Data] | Client writes packet to server {} | packet: {}", serverAddressToConnect, packetToSend);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = clientSocketChannel.register(selector, SelectionKey.OP_READ);
-        logSelectionKeyInfo(selectedKey, "write", registeredKey, "read");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.demo.haima.fundamental.server.simplex.nonblocking.socket;
 
-import com.demo.haima.fundamental.utility.data.network.base.DataUtils;
 import com.demo.haima.fundamental.utility.auxiliary.ContainerRunner;
+import com.demo.haima.fundamental.utility.data.network.base.DataUtils;
 import com.demo.haima.fundamental.utility.state.server.nonblocking.ServerSocketState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,8 +177,10 @@ public class NioDataSimplexServerSocket extends ContainerRunner implements Runna
 
         // Register the accepted socket channel to selector
         acceptedSocketChannel.configureBlocking(false);
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-        logSelectionKeyInfo(selectedKey, "accept", registeredKey, "read");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
     }
 
     @Override
@@ -204,8 +206,10 @@ public class NioDataSimplexServerSocket extends ContainerRunner implements Runna
         LOG.info("[Data] | Server reads data from client {} | data: {}", acceptedSocketChannel.getRemoteAddress(), data);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-        logSelectionKeyInfo(selectedKey, "read", registeredKey, "read");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
 
         // Close the accepted socket channel
         closeAcceptedSocketChannel(acceptedSocketChannel);

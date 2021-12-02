@@ -153,8 +153,10 @@ public class NioBaseSimplexServerSocket extends ContainerRunner implements Runna
                 acceptedSocketChannel.socket().setSoLinger(false, -1);
                 // Register the accepted socket channel to selector
                 acceptedSocketChannel.configureBlocking(false);
+                int selectedOpCode = selectedKey.interestOps();
                 SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-                logSelectionKeyInfo(selectedKey, "accept", registeredKey, "read");
+                int registeredOpCode = registeredKey.interestOps();
+                logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
             } else if (selectedKey.isConnectable()) {
                 // Do nothing here
             } else if (selectedKey.isReadable()) {
@@ -178,8 +180,10 @@ public class NioBaseSimplexServerSocket extends ContainerRunner implements Runna
                 String data = new String(dataBytesRead);
                 LOG.info("[Data] | Server reads data from client {} | data: {}", acceptedSocketChannel.getRemoteAddress(), data);
                 // Register the accepted socket channel to selector
+                int selectedOpCode = selectedKey.interestOps();
                 SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-                logSelectionKeyInfo(selectedKey, "read", registeredKey, "read");
+                int registeredOpCode = registeredKey.interestOps();
+                logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
                 // Close the accepted socket channel
                 closeAcceptedSocketChannel(acceptedSocketChannel);
             } else if (selectedKey.isWritable()) {

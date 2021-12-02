@@ -199,7 +199,8 @@ public class NioSerdesSimplexServerSocket extends ContainerRunner implements Run
         // Register the accepted socket channel to selector
         acceptedSocketChannel.configureBlocking(false);
         SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-        logSelectionKeyInfo(selectedKey, "accept", registeredKey, "read");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, SelectionKey.OP_ACCEPT, registeredKey, registeredOpCode);
     }
 
     @Override
@@ -223,8 +224,10 @@ public class NioSerdesSimplexServerSocket extends ContainerRunner implements Run
         LOG.info("[Data] | Server reads packet from client {} | packet: {}", acceptedSocketChannel.getRemoteAddress(), packet);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-        logSelectionKeyInfo(selectedKey, "read", registeredKey, "read");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
 
         // Close the accepted socket channel
         selectedKey.cancel();

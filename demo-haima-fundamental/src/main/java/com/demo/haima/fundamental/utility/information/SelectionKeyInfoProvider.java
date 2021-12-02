@@ -9,12 +9,20 @@ import java.nio.channels.SelectionKey;
 public interface SelectionKeyInfoProvider {
 
     /**
+     * This method is used to get the selection key event in string
+     *
+     * @param opCode
+     * @return
+     */
+    String getSelectionKeyEvent(int opCode);
+
+    /**
      *  This method is used to log the information of selection keys
      *
      * @param selectedKey
-     * @param selectedEvents
+     * @param selectedOpCode
      * @param registeredKey
-     * @param registeredEvents
+     * @param registeredOpCode
      */
-    void logSelectionKeyInfo(SelectionKey selectedKey, String selectedEvents, SelectionKey registeredKey, String registeredEvents);
+    void logSelectionKeyInfo(SelectionKey selectedKey, int selectedOpCode, SelectionKey registeredKey, int registeredOpCode);
 }

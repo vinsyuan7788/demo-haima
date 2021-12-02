@@ -187,8 +187,10 @@ public class NioDemoSimplexServerSocket extends ContainerRunner implements Runna
 
         // Register the accepted socket channel to selector
         acceptedSocketChannel.configureBlocking(false);
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-        logSelectionKeyInfo(selectedKey, "accept", registeredKey, "read");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
     }
 
     @Override
@@ -222,8 +224,10 @@ public class NioDemoSimplexServerSocket extends ContainerRunner implements Runna
         processReceivedPacket(packet);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-        logSelectionKeyInfo(selectedKey, "read", registeredKey, "read");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
 
 //        // Close the accepted socket channel
 //        selectedKey.cancel();

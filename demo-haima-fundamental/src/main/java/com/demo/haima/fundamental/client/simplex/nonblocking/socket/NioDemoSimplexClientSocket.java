@@ -199,8 +199,10 @@ public class NioDemoSimplexClientSocket extends ContainerRunner implements Runna
         logSocketChannelInfo(clientSocketChannel);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         registeredKey = clientSocketChannel.register(selector, SelectionKey.OP_WRITE);
-        logSelectionKeyInfo(selectedKey, "connect", registeredKey, "write");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
     }
 
     @Override
@@ -240,8 +242,10 @@ public class NioDemoSimplexClientSocket extends ContainerRunner implements Runna
         LOG.info("[Data] | Client writes packet to server {} | packet: {}", serverAddressToConnect, packetToSend);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = clientSocketChannel.register(selector, SelectionKey.OP_WRITE);
-        logSelectionKeyInfo(selectedKey, "write", registeredKey, "write");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
 
         // Mark the packet as processed
         packetToSend.setPacketProcessState(PacketProcessState.PROCESSED);

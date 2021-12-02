@@ -1,11 +1,12 @@
 package com.demo.haima.fundamental.utility.auxiliary;
 
 import com.demo.haima.common.utility.LogUtils;
+import com.demo.haima.fundamental.utility.exception.DemoException;
+import com.demo.haima.fundamental.utility.executor.ThreadPoolProvider;
 import com.demo.haima.fundamental.utility.information.AsynchronousChannelInfoProvider;
 import com.demo.haima.fundamental.utility.information.SelectableChannelBlockingModeProvider;
 import com.demo.haima.fundamental.utility.information.SelectionKeyInfoProvider;
 import com.demo.haima.fundamental.utility.information.SocketChannelInfoProvider;
-import com.demo.haima.fundamental.utility.executor.ThreadPoolProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,9 +74,68 @@ public class ContainerRunner extends Thread implements SelectableChannelBlocking
     }
 
     @Override
-    public void logSelectionKeyInfo(SelectionKey selectedKey, String selectedEvents, SelectionKey registeredKey, String registeredEvents) {
+    public String getSelectionKeyEvent(int opCode) {
+        String event;
+        switch (opCode) {
+            // Single event
+            case 1:
+                event = "read";
+                break;
+            case 4:
+                event = "write";
+                break;
+            case 8:
+                event = "connect";
+                break;
+            case 16:
+                event = "accept";
+                break;
+            // Double event:
+            case 5:
+                event = "read, write";
+                break;
+            case 9:
+                event = "read, connect";
+                break;
+            case 17:
+                event = "read, accept";
+                break;
+            case 12:
+                event = "write, connect";
+                break;
+            case 20:
+                event = "write, accept";
+                break;
+            case 24:
+                event = "connect, accept";
+                break;
+            // Triple event
+            case 13:
+                event = "read, write, connect";
+                break;
+            case 21:
+                event = "read, write, accept";
+                break;
+            case 25:
+                event = "read, connect, accept";
+                break;
+            case 28:
+                event = "write, connect, accept";
+                break;
+            // Quadruple event
+            case 29:
+                event = "read, write, connect, accept";
+                break;
+            default:
+                throw new DemoException("Selection key event code unknown");
+        }
+        return event;
+    }
+
+    @Override
+    public void logSelectionKeyInfo(SelectionKey selectedKey, int selectedOpCode, SelectionKey registeredKey, int registeredOpCode) {
         LOG.info(LogUtils.getMessage(className + "#logSelectionKeyInfo", "selected key: {} | selected events: {} | registered key: {} | registered events: {}"),
-                selectedKey, selectedEvents, registeredKey, registeredEvents);
+                selectedKey, getSelectionKeyEvent(selectedOpCode), registeredKey, getSelectionKeyEvent(registeredOpCode));
     }
 
     @Override

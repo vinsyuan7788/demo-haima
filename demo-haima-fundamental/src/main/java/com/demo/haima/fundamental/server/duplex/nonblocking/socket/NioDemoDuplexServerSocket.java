@@ -197,8 +197,10 @@ public class NioDemoDuplexServerSocket extends ContainerRunner implements Runnab
 
         // Register the accepted socket channel to selector
         acceptedSocketChannel.configureBlocking(false);
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-        logSelectionKeyInfo(selectedKey, "accept", registeredKey, "read");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
     }
 
     @Override
@@ -232,8 +234,10 @@ public class NioDemoDuplexServerSocket extends ContainerRunner implements Runnab
         Packet packetToSend = processReceivedPacket(packet);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_WRITE, packetToSend);
-        logSelectionKeyInfo(selectedKey, "read", registeredKey, "write");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
     }
 
     @Override
@@ -258,8 +262,10 @@ public class NioDemoDuplexServerSocket extends ContainerRunner implements Runnab
         LOG.info("[Data] | Server writes packet to client {} | packet: {}", acceptedSocketChannel.getRemoteAddress(), packetToSend);
 
         // Register the accepted socket channel to selector
+        int selectedOpCode = selectedKey.interestOps();
         SelectionKey registeredKey = acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
-        logSelectionKeyInfo(selectedKey, "write", registeredKey, "read");
+        int registeredOpCode = registeredKey.interestOps();
+        logSelectionKeyInfo(selectedKey, selectedOpCode, registeredKey, registeredOpCode);
 
         // Close the accepted socket channel
 //        selectedKey.cancel();
