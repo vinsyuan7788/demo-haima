@@ -2,7 +2,7 @@ package com.demo.haima.fundamental.server.duplex.asynchronous.socket.handler;
 
 import com.demo.haima.fundamental.server.duplex.asynchronous.socket.AioDemoDuplexServerSocket;
 import com.demo.haima.fundamental.server.duplex.asynchronous.socket.handler.AioDemoDuplexServerSocketAcceptCompletionHandler.Attachment;
-import com.demo.haima.fundamental.utility.auxiliary.CompletionHandlerHelper;
+import com.demo.haima.fundamental.utility.handler.CompletionHandlerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

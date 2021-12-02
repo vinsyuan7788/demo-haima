@@ -2,7 +2,7 @@ package com.demo.haima.fundamental.server.duplex.asynchronous.socket.handler;
 
 import com.demo.haima.fundamental.server.duplex.asynchronous.socket.AioDemoDuplexServerSocket;
 import com.demo.haima.fundamental.server.duplex.asynchronous.socket.handler.AioDemoDuplexServerSocketReadCompletionHandler.Attachment;
-import com.demo.haima.fundamental.utility.auxiliary.CompletionHandlerHelper;
+import com.demo.haima.fundamental.utility.handler.CompletionHandlerHelper;
 import com.demo.haima.fundamental.utility.business.snowflake.SnowFlakeIdWorker;
 import com.demo.haima.fundamental.utility.business.snowflake.factory.SnowFlakeIdWorkerFactory;
 import com.demo.haima.fundamental.utility.data.network.definition.ByteBufferType;

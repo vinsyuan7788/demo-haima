@@ -2,7 +2,7 @@ package com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler;
 
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.AioDemoDuplexClientSocket;
 import com.demo.haima.fundamental.client.duplex.asynchronous.socket.handler.AioDemoDuplexClientSocketConnectCompletionHandler.Attachment;
-import com.demo.haima.fundamental.utility.auxiliary.CompletionHandlerHelper;
+import com.demo.haima.fundamental.utility.handler.CompletionHandlerHelper;
 import com.demo.haima.fundamental.utility.data.network.definition.ByteBufferType;
 import com.demo.haima.fundamental.utility.data.network.packet.Packet;
 import com.demo.haima.fundamental.utility.state.client.asynchronous.ClientSocketState;

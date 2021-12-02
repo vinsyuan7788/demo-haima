@@ -1,4 +1,4 @@
-package com.demo.haima.fundamental.utility.auxiliary;
+package com.demo.haima.fundamental.utility.handler;
 
 import com.demo.haima.common.utility.LogUtils;
 import com.demo.haima.fundamental.utility.exception.handler.CompletionExceptionHandler;

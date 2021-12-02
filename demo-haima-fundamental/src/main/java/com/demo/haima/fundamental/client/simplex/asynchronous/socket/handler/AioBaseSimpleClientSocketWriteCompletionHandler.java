@@ -2,7 +2,7 @@ package com.demo.haima.fundamental.client.simplex.asynchronous.socket.handler;
 
 import com.demo.haima.fundamental.client.simplex.asynchronous.socket.AioBaseSimplexClientSocket;
 import com.demo.haima.fundamental.client.simplex.asynchronous.socket.handler.AioBaseSimpleClientSocketWriteCompletionHandler.Attachment;
-import com.demo.haima.fundamental.utility.auxiliary.CompletionHandlerHelper;
+import com.demo.haima.fundamental.utility.handler.CompletionHandlerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
