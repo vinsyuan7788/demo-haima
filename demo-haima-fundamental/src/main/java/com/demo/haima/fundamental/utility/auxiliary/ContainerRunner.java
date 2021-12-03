@@ -6,6 +6,7 @@ import com.demo.haima.fundamental.utility.executor.ThreadPoolProvider;
 import com.demo.haima.fundamental.utility.information.AsynchronousChannelInfoProvider;
 import com.demo.haima.fundamental.utility.information.SelectableChannelBlockingModeProvider;
 import com.demo.haima.fundamental.utility.information.SelectionKeyInfoProvider;
+import com.demo.haima.fundamental.utility.information.SelectorInfoProvider;
 import com.demo.haima.fundamental.utility.information.SocketChannelInfoProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This class is used to run a container (i.e., server or client)
@@ -33,11 +35,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Vince Yuan
  * @date 2021/11/20
  */
-public class ContainerRunner extends Thread implements SelectableChannelBlockingModeProvider, SocketChannelInfoProvider, SelectionKeyInfoProvider, AsynchronousChannelInfoProvider, ThreadPoolProvider {
+public class ContainerRunner extends Thread implements SelectableChannelBlockingModeProvider, SocketChannelInfoProvider, SelectionKeyInfoProvider, SelectorInfoProvider, AsynchronousChannelInfoProvider, ThreadPoolProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContainerRunner.class);
 
-    private String className = getClass().getSimpleName();
+    private final String className = getClass().getSimpleName();
+
+    protected AtomicLong roundOfSelect = new AtomicLong(0);
+    protected AtomicLong roundOfIteratingSelectedKeys = new AtomicLong(0);
 
     public ContainerRunner() {
         super();
@@ -155,6 +160,11 @@ public class ContainerRunner extends Thread implements SelectableChannelBlocking
     @Override
     public ExecutorService getDefaultCachedThreadPool(String threadName) {
         return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<>(), new DefaultThreadFactory(threadName), new AbortPolicy());
+    }
+
+    @Override
+    public void logSelectAndSelectedKeyIterationInfo(String prefix) {
+        LOG.info(LogUtils.getMessage(className + "#" + prefix, "Select round: {} | Selected key iterate round: {}"), roundOfSelect.get(), roundOfIteratingSelectedKeys.get());
     }
 
     /**

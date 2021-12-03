@@ -58,7 +58,7 @@ public class NioDemoDuplexTest {
 
         List<Boolean> resultList = new ArrayList<>();
         long startTimeMillis = System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             Boolean result = client.write(dataArrayToWrite[random.nextInt(dataArrayToWrite.length)]);
             resultList.add(result);
         }
@@ -78,7 +78,7 @@ public class NioDemoDuplexTest {
 
         List<Long> resultList = new ArrayList<>();
         long startTimeMillis = System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             Long snowflakeId = client.getSnowflakeId(3);
             resultList.add(snowflakeId);
         }

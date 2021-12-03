@@ -80,8 +80,7 @@ public class NioDemoDuplexClientSocket extends ContainerRunner implements Runnab
         while (client.getClientState() == ClientState.RUNNING) {
             try {
                 // Socket channel connects to server if it is not connected yet
-                if (getClientSocketState() == ClientSocketState.INITIAL
-                        || getClientSocketState() == ClientSocketState.CONNECTING) {
+                if (getClientSocketState() == ClientSocketState.INITIAL || getClientSocketState() == ClientSocketState.CONNECTING) {
                     // Set up a client socket channel
                     SocketChannel clientSocketChannel = createSocketChannel();
                     if (clientSocketChannel == null) {
