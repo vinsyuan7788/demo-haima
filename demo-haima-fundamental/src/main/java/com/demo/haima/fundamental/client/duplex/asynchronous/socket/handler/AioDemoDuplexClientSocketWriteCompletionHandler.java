@@ -29,7 +29,7 @@ public class AioDemoDuplexClientSocketWriteCompletionHandler extends CompletionH
             Packet packetToSend = attachment.getPacketToSend();
 
             // Check write event completion result
-            if (numberOfBytesWritten < 0) {
+            if (numberOfBytesWritten <= 0) {
                 return;
             }
             LOG.info("[Data] | Client writes bytes to server {} | bytes: {}", clientSocket.getServerAddressToConnect(), numberOfBytesWritten);

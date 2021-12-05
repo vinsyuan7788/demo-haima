@@ -221,7 +221,7 @@ public class NioDemoDuplexServerSocket extends ContainerRunner implements Runnab
         ByteBuffer byteBufferOfBody = ByteBuffer.allocateDirect(1024);
         ByteBuffer[] byteBuffers = new ByteBuffer[] { byteBufferOfHeader, byteBufferOfBody };
         long numberOfBytesRead = acceptedSocketChannel.read(byteBuffers);
-        if (numberOfBytesRead < 0) {
+        if (numberOfBytesRead <= 0) {
             return;
         }
         LOG.info("[Data] | Server reads bytes from client {} | bytes: {}", acceptedSocketChannel.getRemoteAddress(), numberOfBytesRead);
@@ -255,7 +255,7 @@ public class NioDemoDuplexServerSocket extends ContainerRunner implements Runnab
         ByteBuffer[] byteBuffers = packetToSend.createByteBuffersOnServer(ByteBufferType.DIRECT);
         // Gather-write the byte buffers to client
         long numberOfBytesWritten = acceptedSocketChannel.write(byteBuffers);
-        if (numberOfBytesWritten < 0) {
+        if (numberOfBytesWritten <= 0) {
             return;
         }
         LOG.info("[Data] | Server writes bytes to client {} | bytes: {}", acceptedSocketChannel.getRemoteAddress(), numberOfBytesWritten);

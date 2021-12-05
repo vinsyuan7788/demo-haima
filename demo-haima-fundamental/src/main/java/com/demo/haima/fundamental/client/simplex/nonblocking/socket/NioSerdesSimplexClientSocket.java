@@ -84,7 +84,7 @@ public class NioSerdesSimplexClientSocket extends ContainerRunner implements Run
                 ByteBuffer byteBuffer = packetToSend.createByteBufferOnClient(ByteBufferType.DIRECT);
                 // Send the byte buffer to server
                 int numberOfBytesWritten = clientSocketChannel.write(byteBuffer);
-                if (numberOfBytesWritten < 0) {
+                if (numberOfBytesWritten <= 0) {
                     continue;
                 }
                 LOG.info("[Data] | Client writes bytes to server {} | bytes: {}", serverAddressToConnect, numberOfBytesWritten);

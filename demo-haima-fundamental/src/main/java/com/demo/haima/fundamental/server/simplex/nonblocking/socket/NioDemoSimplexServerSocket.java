@@ -211,7 +211,7 @@ public class NioDemoSimplexServerSocket extends ContainerRunner implements Runna
         ByteBuffer byteBufferOfBody = ByteBuffer.allocateDirect(1024);
         ByteBuffer[] byteBuffers = new ByteBuffer[] { byteBufferOfHeader, byteBufferOfBody };
         long numberOfBytesRead = acceptedSocketChannel.read(byteBuffers);
-        if (numberOfBytesRead < 0) {
+        if (numberOfBytesRead <= 0) {
             return;
         }
         LOG.info("[Data] | Server reads bytes from client {} | bytes: {}", acceptedSocketChannel.getRemoteAddress(), numberOfBytesRead);

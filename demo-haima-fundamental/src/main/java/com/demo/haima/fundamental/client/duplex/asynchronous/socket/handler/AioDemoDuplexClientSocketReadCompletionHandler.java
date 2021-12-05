@@ -39,7 +39,7 @@ public class AioDemoDuplexClientSocketReadCompletionHandler extends CompletionHa
             ByteBuffer byteBufferOfBody = attachment.getReadByteBufferOfBody();
 
             // Check read event completion result
-            if (numberOfBytesRead < 0) {
+            if (numberOfBytesRead <= 0) {
                 return;
             }
             LOG.info("[Data] | Client reads bytes from server {} | bytes: {} | byte buffer of header read: {} | byte buffer of body read: {}", clientSocket.getServerAddressToConnect(), numberOfBytesRead, byteBufferOfHeader, byteBufferOfBody);

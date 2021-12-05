@@ -169,7 +169,7 @@ public class AioBaseSimplexServerSocket extends ContainerRunner implements Runna
 
                 // Get the number of bytes read once the event is completed
                 Integer numberOfBytesRead = futureOfReadCompletionResult.get();
-                if (numberOfBytesRead < 0) {
+                if (numberOfBytesRead <= 0) {
                     continue;
                 }
                 LOG.info("[Data] | Server reads bytes from client {} | bytes: {}", acceptedSocketChannel.getRemoteAddress(), numberOfBytesRead);
