@@ -1,5 +1,8 @@
 package com.demo.haima.test.unit.channel.socket.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -14,6 +17,8 @@ import java.util.Set;
  * @date 2021/12/5
  */
 public class Server extends Thread {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Server.class);
 
     private ServerSocketChannel serverSocketChannel;
     private Selector selector;
@@ -37,6 +42,7 @@ public class Server extends Thread {
                     SelectionKey selectedKey = selectedKeyIterator.next();
                     if (selectedKey.isAcceptable()) {
                         SocketChannel acceptedSocketChannel = serverSocketChannel.accept();
+                        LOG.info("Server accepts connection from client: {}", acceptedSocketChannel.getRemoteAddress());
                         acceptedSocketChannel.configureBlocking(false);
                         acceptedSocketChannel.register(selector, SelectionKey.OP_READ);
                     }
@@ -48,7 +54,9 @@ public class Server extends Thread {
                         ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
                         int numberOfBytesRead = acceptedSocketChannel.read(byteBuffer);
                         if (numberOfBytesRead <= 0) { continue; }
-                        acceptedSocketChannel.register(selector, SelectionKey.OP_WRITE, byteBuffer.array());
+                        byte[] byteArray = byteBuffer.array();
+                        LOG.info("Server reads data: {}", new String(byteArray));
+                        acceptedSocketChannel.register(selector, SelectionKey.OP_WRITE, byteArray);
                     }
                     if (selectedKey.isWritable()) {
                         SocketChannel acceptedSocketChannel = (SocketChannel) selectedKey.channel();
