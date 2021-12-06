@@ -22,12 +22,14 @@ public class SocketChannelTest {
     public void testStartServerAndClients() throws Exception {
         server = new Server();
         server.start();
+        System.out.println("server is started");
         clients = new Client[10];
         for (int i = 0; i < clients.length; i++) {
             clients[i] = new Client("Client" + (i + 1));
             clients[i].start();
             while (!clients[i].isConnected()) { }
         }
+        System.out.println("clients are started");
         System.out.println("testStartServerAndClients is completed");
     }
 
@@ -59,10 +61,13 @@ public class SocketChannelTest {
     }
 
     @After
-    public void closeClientsAndServer() throws Exception {
+    public void testCloseClientsAndServer() throws Exception {
         for (int i = 0; i < clients.length; i++) {
             clients[i].close();
         }
+        System.out.println("clients are closed");
         server.close();
+        System.out.println("server is closed");
+        System.out.println("testCloseClientsAndServer is completed");
     }
 }
